@@ -9,3 +9,22 @@
 .metric__text {
     margin-bottom: 5px;
 }
+
+
+
+.symbols_passed {
+    color: #49AC58;
+}
+
+.symbols_failed {
+    color: #D03E1C;
+}
+
+.symbols_black {
+     color: #323131;
+ }
+
+.symbols_current {
+    background-color: #e3f2fd;
+    border-radius: 3px;
+}

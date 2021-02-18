@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Trainer.css';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { keyPressed, keyPressedWrong, keyPressedCorrect, timeStarted, timeEnded, setLangCorrect } from "./trainerSlice";
 
@@ -8,13 +8,13 @@ function Trainer() {
     const [text, setText] = useState('');
     const [textLoading, setTextLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
-    const [countPressedCorrect, setCountPressedCorrect] = useState(0);
     const [states, setStates] = useState([]);
     const [shouldWriteState, setShouldWrite] = useState(true);
     const [stop, setStop] = useState(false);
     const [timerId, setTimerId] = useState(0);
 
     const dispatch = useDispatch();
+    const trainer = useSelector(state => state.trainer);
 
     useEffect(() => {
         fetch('https://baconipsum.com/api/?type=meat-and-filler&paras=1')
@@ -38,7 +38,7 @@ function Trainer() {
                 );
             }
 
-            if(countPressedCorrect === 0) {
+            if(trainer.keysPressedCorrect === 0) {
                 dispatch(
                     timeStarted((new Date()).getTime())
                 );
@@ -54,7 +54,7 @@ function Trainer() {
 
             dispatch( keyPressed() );
 
-            if(e.key === text[countPressedCorrect]) {
+            if(e.key === text[trainer.keysPressedCorrect]) {
                 setShouldWrite(true);
                 setStates((prevState) => {
                     if(!shouldWriteState) {
@@ -65,7 +65,6 @@ function Trainer() {
                         true
                     ]
                 });
-                setCountPressedCorrect((prevState) => (prevState + 1));
                 dispatch( keyPressedCorrect() );
                 setStop(false);
             } else {
@@ -92,10 +91,10 @@ function Trainer() {
     }, [text, handleKeyDown]);
 
     useEffect(() => {
-        if(timerId && countPressedCorrect === text.length) {
+        if(timerId && trainer.keysPressedCorrect === text.length) {
             clearInterval(timerId);
         }
-    }, [countPressedCorrect, timerId]);
+    }, [trainer.keysPressedCorrect, timerId]);
 
 
     return (
@@ -118,7 +117,7 @@ function Trainer() {
                         const state = states[idx];
                         return (
                             <span key={idx}
-                                  className={`${state === true ? 'symbols_passed' : state === false ?                                       'symbols_failed' : 'symbols_black'} ${countPressedCorrect === idx &&                                      'symbols_current'}`}>
+                                  className={`${state === true ? 'symbols_passed' : state === false ?                                       'symbols_failed' : 'symbols_black'} ${trainer.keysPressedCorrect === idx &&                                      'symbols_current'}`}>
                                 {elem}</span>
                         )
                     })

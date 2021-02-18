@@ -12,6 +12,9 @@ function Header() {
                     <li className="nav-item">
                         <a className="nav-link active" href="#">Тестирование</a>
                     </li>
+                    <li className="nav-item">
+                        <a className="nav-link" href="#">Инфо</a>
+                    </li>
                 </ul>
             </div>
         </nav>

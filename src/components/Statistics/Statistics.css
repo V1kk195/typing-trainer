@@ -1,7 +1,11 @@
-.statistics:last-child {
+.statistics__metric:last-child {
     margin-top: 15px;
 }
 
 .metric__text {
     margin-bottom: 5px;
+}
+
+.metric__value {
+    font-size: 1.2rem;
 }

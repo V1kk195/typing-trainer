@@ -1,3 +1,9 @@
 .trainer-container {
     margin-top: 20px;
 }
+
+@media (min-width: 1200px) {
+    .app {
+        max-width: 980px;
+    }
+}

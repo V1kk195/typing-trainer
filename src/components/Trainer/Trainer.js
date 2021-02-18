@@ -63,42 +63,30 @@ function Trainer() {
     }
 
     return (
-        <div className="d-flex p-3 trainer bg-white border border-white rounded">
-            <div className="col symbols">
-                {
-                    textLoading ? (
-                        <div className="trainer__spinner d-flex justify-content-center">
-                            <div className="spinner-border text-secondary" role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>)
-                        :
-                        hasError
-                        ?
-                        <div className="trainer__error d-flex align-items-center justify-content-center">
-                            <p className="text-center">Error occurred. Please, re-load the page.</p>
+        <div className="col symbols trainer">
+            {
+                textLoading ? (
+                    <div className="trainer__spinner d-flex justify-content-center">
+                        <div className="spinner-border text-secondary" role="status">
+                            <span className="sr-only">Loading...</span>
                         </div>
-                        :
-                        text.map((elem, idx) => {
-                            const state = states[idx];
-                            return (
-                                <span key={idx}
-                                      className={`${state === true ? 'symbols_passed' : state === false ?                                       'symbols_failed' : 'symbols_black'} ${countPressedCorrect === idx &&                                      'symbols_current'}`}>
-                                    {elem}</span>
-                            )
-                        })
-                }
-            </div>
-            <div className="trainer__metrics col-3 d-flex flex-column align-content-center text-center">
-                <div className="trainer__metric metric">
-                    <p className="metric__text"><i className="bi bi-stopwatch"/> скорость</p>
-                    <span>50 зн/мин</span>
-                </div>
-                <div className="trainer__metric metric">
-                    <p className="metric__text"><i className="bi bi-record-circle"/> точность</p>
-                    <span>100%</span>
-                </div>
-            </div>
+                    </div>)
+                    :
+                    hasError
+                    ?
+                    <div className="trainer__error d-flex align-items-center justify-content-center">
+                        <p className="text-center">Error occurred. Please, re-load the page.</p>
+                    </div>
+                    :
+                    text.map((elem, idx) => {
+                        const state = states[idx];
+                        return (
+                            <span key={idx}
+                                  className={`${state === true ? 'symbols_passed' : state === false ?                                       'symbols_failed' : 'symbols_black'} ${countPressedCorrect === idx &&                                      'symbols_current'}`}>
+                                {elem}</span>
+                        )
+                    })
+            }
         </div>
     );
 }

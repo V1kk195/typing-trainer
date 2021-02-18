@@ -1,7 +1,3 @@
-.trainer {
-    margin-top: 20px;
-}
-
 .trainer__spinner {
     align-items: center;
     height: 100%;
@@ -11,15 +7,6 @@
 .trainer__error {
     height: 100%;
 }
-
-.trainer__metric:last-child {
-    margin-top: 15px;
-}
-
-.metric__text {
-    margin-bottom: 5px;
-}
-
 
 
 .symbols_passed {

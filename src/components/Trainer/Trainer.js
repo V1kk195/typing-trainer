@@ -12,6 +12,7 @@ function Trainer() {
     const [states, setStates] = useState([]);
     const [shouldWriteState, setShouldWrite] = useState(true);
     const [stop, setStop] = useState(false);
+    const [timerId, setTimerId] = useState(0);
 
     const dispatch = useDispatch();
 
@@ -26,21 +27,28 @@ function Trainer() {
                 setHasError(true);
                 setTextLoading(false);
             });
-    }, [])
+    }, []);
 
     const handleKeyDown = (e) => {
-        if(countPressedCorrect === 0) {
-            dispatch(
-                timeStarted((new Date()).getTime())
-            );
-        }
+
         if(e.key !== 'Shift') {
+            if(countPressedCorrect === 0) {
+                dispatch(
+                    timeStarted((new Date()).getTime())
+                );
+
+                setTimerId(
+                    setInterval(() => {
+                        dispatch(
+                            timeEnded((new Date()).getTime())
+                        )
+                    }, 500)
+                )
+            }
+
             dispatch( keyPressed() );
 
             if(e.key === text[countPressedCorrect]) {
-                dispatch(
-                    timeEnded((new Date()).getTime())
-                );
                 setShouldWrite(true);
                 setStates((prevState) => {
                     if(!shouldWriteState) {
@@ -67,8 +75,7 @@ function Trainer() {
                 setShouldWrite(false);
             }
         }
-    }
-
+    };
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
@@ -76,7 +83,13 @@ function Trainer() {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [text, handleKeyDown])
+    }, [text, handleKeyDown]);
+
+    useEffect(() => {
+        if(timerId && countPressedCorrect === text.length) {
+            clearInterval(timerId);
+        }
+    }, [countPressedCorrect, timerId]);
 
 
     return (

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Trainer.css';
+import { useDispatch } from "react-redux";
+
+import { keyPressed, keyPressedWrong, keyPressedCorrect } from "./trainerSlice";
 
 function Trainer() {
     const [text, setText] = useState('');
@@ -9,6 +12,8 @@ function Trainer() {
     const [states, setStates] = useState([]);
     const [shouldWriteState, setShouldWrite] = useState(true);
     const [stop, setStop] = useState(false);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         fetch('https://baconipsum.com/api/?type=meat-and-filler&paras=1')
@@ -23,17 +28,9 @@ function Trainer() {
             });
     }, [])
 
-    useEffect(() => {
-        window.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [text, countPressedCorrect, stop, shouldWriteState])
-
     const handleKeyDown = (e) => {
         if(e.key !== 'Shift') {
-
+            dispatch( keyPressed() );
             if(e.key === text[countPressedCorrect]) {
                 setShouldWrite(true);
                 setStates((prevState) => {
@@ -46,8 +43,10 @@ function Trainer() {
                     ]
                 });
                 setCountPressedCorrect((prevState) => (prevState + 1));
+                dispatch( keyPressedCorrect() );
                 setStop(false);
             } else {
+                dispatch( keyPressedWrong() );
                 if(stop) {
                     return;
                 }
@@ -59,8 +58,17 @@ function Trainer() {
                 setShouldWrite(false);
             }
         }
-
     }
+
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [text, handleKeyDown])
+
 
     return (
         <div className="col symbols trainer">

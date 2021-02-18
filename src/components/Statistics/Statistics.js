@@ -4,19 +4,22 @@ import { useSelector } from "react-redux";
 import './Statistics.css';
 
 function Statistics() {
-    const keys = useSelector(state => state.trainer);
+    const trainer = useSelector(state => state.trainer);
 
-    const accuracy = keys.keysPressedCorrect ? Math.round(keys.keysPressedCorrect / keys.keysPressedAll * 100) : 0;
+    const timeSpent = (trainer.endTime - trainer.startTime) / 60000;
+    const speed = Math.round(trainer.keysPressedCorrect / timeSpent);
+
+    const accuracy = Math.round(trainer.keysPressedCorrect / trainer.keysPressedAll * 100);
 
     return (
         <div className="statistics col-3 d-flex flex-column align-content-center text-center">
             <div className="statistics__metric metric">
                 <p className="metric__text"><i className="bi bi-stopwatch"/> скорость</p>
-                <span>50 зн/мин</span>
+                <span>{isNaN(speed) ? 0 : speed} зн/мин</span>
             </div>
             <div className="statistics__metric metric">
                 <p className="metric__text"><i className="bi bi-record-circle"/> точность</p>
-                <span>{accuracy}%</span>
+                <span>{isNaN(accuracy) ? 0 : accuracy}%</span>
             </div>
         </div>
     )

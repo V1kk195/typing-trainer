@@ -7,7 +7,8 @@ export const trainerSlice = createSlice({
         keysPressedWrong: 0,
         keysPressedCorrect: 0,
         startTime: 0,
-        endTime: 0
+        endTime: 0,
+        langCorrect: true
     },
     reducers: {
         keyPressed: (state) => {
@@ -24,10 +25,13 @@ export const trainerSlice = createSlice({
         },
         timeEnded: (state, action) => {
             state.endTime = action.payload;
+        },
+        setLangCorrect: (state, action) => {
+            state.langCorrect = action.payload;
         }
     }
 });
 
-export const { keyPressed, keyPressedWrong, keyPressedCorrect, timeStarted, timeEnded } = trainerSlice.actions;
+export const { keyPressed, keyPressedWrong, keyPressedCorrect, timeStarted, timeEnded, setLangCorrect } = trainerSlice.actions;
 
 export default trainerSlice.reducer;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Trainer.css';
 import { useDispatch } from "react-redux";
 
-import { keyPressed, keyPressedWrong, keyPressedCorrect, timeStarted, timeEnded } from "./trainerSlice";
+import { keyPressed, keyPressedWrong, keyPressedCorrect, timeStarted, timeEnded, setLangCorrect } from "./trainerSlice";
 
 function Trainer() {
     const [text, setText] = useState('');
@@ -31,7 +31,13 @@ function Trainer() {
 
     const handleKeyDown = (e) => {
 
-        if(e.key !== 'Shift') {
+        if(e.key.length === 1) {
+            if(e.key.match(/[^\u0000-\u007f]/g)) {
+                dispatch(
+                    setLangCorrect(false)
+                );
+            }
+
             if(countPressedCorrect === 0) {
                 dispatch(
                     timeStarted((new Date()).getTime())

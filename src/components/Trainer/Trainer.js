@@ -3,6 +3,8 @@ import './Trainer.css';
 
 function Trainer() {
     const [text, setText] = useState('');
+    const [textLoading, setTextLoading] = useState(true);
+    const [hasError, setHasError] = useState(false);
     const [countPressedCorrect, setCountPressedCorrect] = useState(0);
     const [states, setStates] = useState([]);
     const [shouldWriteState, setShouldWrite] = useState(true);
@@ -11,8 +13,14 @@ function Trainer() {
     useEffect(() => {
         fetch('https://baconipsum.com/api/?type=meat-and-filler&paras=1')
             .then((res) => res.json())
-            .then((text) => setText(text.join('').replace(/  /g, ' ').split('')))
-            .catch((err) => console.log(err));
+            .then((text) => {
+                setText(text.join('').replace(/ {2}/g, ' ').split(''));
+                setTextLoading(false);
+            })
+            .catch(() => {
+                setHasError(true);
+                setTextLoading(false);
+            });
     }, [])
 
     useEffect(() => {
@@ -58,14 +66,27 @@ function Trainer() {
         <div className="d-flex p-3 trainer bg-white border border-white rounded">
             <div className="col symbols">
                 {
-                    text && text.map((elem, idx) => {
-                        const state = states[idx];
-                        return (
-                            <span key={idx}
-                                  className={`${state === true ? 'symbols_passed' : state === false ? 'symbols_failed' : 'symbols_black'} ${countPressedCorrect === idx && 'symbols_current'}`}>
-                                {elem}</span>
-                        )
-                    })
+                    textLoading ? (
+                        <div className="trainer__spinner d-flex justify-content-center">
+                            <div className="spinner-border text-secondary" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        </div>)
+                        :
+                        hasError
+                        ?
+                        <div className="trainer__error d-flex align-items-center justify-content-center">
+                            <p className="text-center">Error occurred. Please, re-load the page.</p>
+                        </div>
+                        :
+                        text.map((elem, idx) => {
+                            const state = states[idx];
+                            return (
+                                <span key={idx}
+                                      className={`${state === true ? 'symbols_passed' : state === false ?                                       'symbols_failed' : 'symbols_black'} ${countPressedCorrect === idx &&                                      'symbols_current'}`}>
+                                    {elem}</span>
+                            )
+                        })
                 }
             </div>
             <div className="trainer__metrics col-3 d-flex flex-column align-content-center text-center">

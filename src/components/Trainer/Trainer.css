@@ -2,6 +2,16 @@
     margin-top: 20px;
 }
 
+.trainer__spinner {
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.trainer__error {
+    height: 100%;
+}
+
 .trainer__metric:last-child {
     margin-top: 15px;
 }
